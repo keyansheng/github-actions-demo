@@ -1,0 +1,29 @@
+name: Format code
+
+on: [push, workflow_dispatch]
+
+jobs:
+  format-code:
+    name: Format code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Run Prettier
+        uses: actionsx/prettier@v2
+        with:
+          args: --write .
+
+      - name: Restore .github/
+        run: git restore .github/ --staged
+
+      - name: Create pull pequest
+        uses: peter-evans/create-pull-request@v3
+        with:
+          branch: format-code
+          commit-message: Format code
+          committer: keyansheng <65121402+keyansheng@users.noreply.github.com>
+          author: keyansheng <65121402+keyansheng@users.noreply.github.com>
+          title: Format code
+          body:
