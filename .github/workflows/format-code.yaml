@@ -1,0 +1,30 @@
+name: Format code
+
+on: [push, workflow_dispatch]
+
+jobs:
+  format-code:
+    name: Format code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Run Prettier
+        uses: actionsx/prettier@v2
+        with:
+          args: --write .
+
+      - name: Commit
+        run: |
+          git add .
+          git restore .github/ --staged
+          git config user.name keyansheng
+          git config user.email 65121402+keyansheng@users.noreply.github.com
+          git commit -m "Format code"
+
+      - name: Push
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
